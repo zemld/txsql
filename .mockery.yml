@@ -1,0 +1,17 @@
+template: testify
+formatter: goimports
+pkgname: mocks
+structname: "Mock{{.InterfaceName | firstUpper}}"
+filename: "{{.InterfaceName | snakecase}}.go"
+packages:
+  github.com/zemld/txsql/pgx:
+    interfaces:
+      pool:
+    config:
+      dir: pgx/mocks
+  github.com/jackc/pgx/v5:
+    interfaces:
+      Tx:
+      Row:
+    config:
+      dir: pgx/mocks

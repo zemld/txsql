@@ -1,0 +1,67 @@
+version: "2"
+
+run:
+  timeout: 3m
+  tests: true
+  allow-parallel-runners: true
+  go: "1.26.5"
+
+formatters:
+  enable:
+    - goimports
+    - gofmt
+
+linters:
+  enable:
+    - asciicheck
+    - bodyclose
+    - cyclop
+    - dupl
+    - decorder
+    - errcheck
+    - exhaustive
+    - funlen
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - govet
+    - ineffassign
+    - loggercheck
+    - mnd
+    - musttag
+    - nestif
+    - perfsprint
+    - revive
+    - staticcheck
+    - testifylint
+    - tparallel
+    - unparam
+    - unused
+    - usetesting
+    - wrapcheck
+    - whitespace
+    - wsl_v5
+
+  settings:
+    goconst:
+      ignore-tests: true
+
+    cyclop:
+      max-complexity: 10
+
+    funlen:
+      lines: 90
+
+    revive:
+      rules:
+        - name: exported
+          disabled: true
+
+  exclusions:
+    rules:
+      - path: _test\.go$
+        linters:
+          - funlen
+          - dupl
+          - goconst
