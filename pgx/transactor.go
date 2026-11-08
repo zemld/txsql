@@ -14,15 +14,17 @@ import (
 const _rollbackTimeout = 5 * time.Second
 
 type pool interface {
-	querier
+	Querier
 	BeginTx(context.Context, pgx.TxOptions) (pgx.Tx, error)
 }
 
-type querier interface {
+type Querier interface {
 	Exec(context.Context, string, ...any) (pgconn.CommandTag, error)
 	Query(context.Context, string, ...any) (pgx.Rows, error)
 	QueryRow(context.Context, string, ...any) pgx.Row
 }
+
+var _ Querier = (*Transactor)(nil)
 
 type Transactor struct {
 	pool     pool
@@ -74,7 +76,7 @@ func (d *Transactor) Do(ctx context.Context, fn func(context.Context) error, opt
 
 type transactionContextKey struct{}
 
-func (d *Transactor) getExecutor(ctx context.Context) querier {
+func (d *Transactor) getExecutor(ctx context.Context) Querier {
 	if tx, ok := ctx.Value(transactionContextKey{}).(pgx.Tx); ok {
 		return tx
 	}
